@@ -1,9 +1,8 @@
 import express, { type Request, type Response } from "express"
 import cors from "cors"
-// import { middleware as keycloakConnectMiddleware } from "./keycloak"
 import { introspectMiddleware, userInfoMiddleware } from "./index"
-// import dotenv from "dotenv"
-// dotenv.config()
+import dotenv from "dotenv"
+dotenv.config()
 
 const { OIDC_ISSUER_URL, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET } = process.env
 
