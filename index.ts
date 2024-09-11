@@ -2,7 +2,7 @@ import { type NextFunction, type Request, type Response } from "express"
 import { BaseClient, Issuer } from "openid-client"
 
 type Options = {
-  issuer_url?: string
+  authority?: string
   client_id?: string
   client_secret?: string
 }
@@ -22,10 +22,10 @@ export const getClient = () => client
 // Note: for the userInfo method, client_secret is not needed
 // This probably implies that the token is not verified
 export const clientInit = async (options: Options) => {
-  const { issuer_url, client_id, client_secret } = options
-  if (!issuer_url) throw new Error(`Mssing issuer_url`)
+  const { authority, client_id, client_secret } = options
+  if (!authority) throw new Error(`Mssing issuer_url`)
   if (!client_id) throw new Error(`Mssing client_id`)
-  const issuer = await Issuer.discover(issuer_url)
+  const issuer = await Issuer.discover(authority)
   client = new issuer.Client({
     client_id,
     client_secret, // Necessary for introspect

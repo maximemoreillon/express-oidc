@@ -4,22 +4,15 @@ import { introspectMiddleware, userInfoMiddleware } from "./index"
 import dotenv from "dotenv"
 dotenv.config()
 
-const { OIDC_ISSUER_URL, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET } = process.env
+const { OIDC_AUTHORITY, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET } = process.env
 
 const app = express()
 
 app.use(cors())
 
-// init({
-//   issuer_url: OIDC_ISSUER_URL,
-//   client_id: OIDC_CLIENT_ID,
-//   client_secret: OIDC_CLIENT_SECRET,
-// })
-
-// app.use(introspectMiddleware)
 app.use(
   userInfoMiddleware({
-    issuer_url: OIDC_ISSUER_URL,
+    authority: OIDC_AUTHORITY,
     client_id: OIDC_CLIENT_ID,
     client_secret: OIDC_CLIENT_SECRET,
   })
