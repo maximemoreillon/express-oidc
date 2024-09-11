@@ -40,7 +40,7 @@ function getToken(req: Request) {
 }
 
 // Problem: Middleware can probably not be async
-export const introspectMiddleware = (options: Options | undefined) => {
+export const introspectMiddleware = (options?: Options) => {
   if (options) clientInit(options)
   return async (req: Request, res: Response, next: NextFunction) => {
     const client = getClient()
@@ -62,7 +62,7 @@ export const introspectMiddleware = (options: Options | undefined) => {
   }
 }
 
-export const userInfoMiddleware = (options: Options | undefined) => {
+export const userInfoMiddleware = (options?: Options) => {
   if (options) clientInit(options)
   return async (req: Request, res: Response, next: NextFunction) => {
     const client = getClient()
