@@ -1,20 +1,16 @@
 import express, { type Request, type Response } from "express"
 import cors from "cors"
-import { introspectMiddleware, userInfoMiddleware } from "./index"
+import authMiddleware from "./index"
 import dotenv from "dotenv"
 dotenv.config()
 
-const { OIDC_AUTHORITY, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET } = process.env
+const { OIDC_JWKS_URI = "" } = process.env
 
 const app = express()
-
 app.use(cors())
-
 app.use(
-  userInfoMiddleware({
-    authority: OIDC_AUTHORITY,
-    client_id: OIDC_CLIENT_ID,
-    client_secret: OIDC_CLIENT_SECRET,
+  authMiddleware({
+    jwksUri: OIDC_JWKS_URI,
   })
 )
 

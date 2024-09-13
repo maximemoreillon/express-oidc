@@ -1,3 +1,3 @@
 # Express OIDC
 
-This is a wrapper around [openid-client](https://www.npmjs.com/package/openid-client) so as to use it as an Express middleware.
+This is an authentication middleware that validates JWT from OIDC providers using JWKS.
