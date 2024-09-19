@@ -21,7 +21,10 @@ export default ({ jwksUri }: Options) => {
   })
   return async (req: Request, res: Response, next: NextFunction) => {
     const token = extractJwt(req)
-    if (!token) return res.status(401).send("Missing token")
+
+    if (!token) {
+      return res.status(401).send("Missing token")
+    }
 
     let decoded: any
 
@@ -33,7 +36,9 @@ export default ({ jwksUri }: Options) => {
     }
     const kid = decoded.header?.kid
 
-    if (!kid) return res.status(401).send("Token kid not found")
+    if (!kid) {
+      return res.status(401).send("Token kid not found")
+    }
 
     const key = await jwksClient.getSigningKey(kid)
 
