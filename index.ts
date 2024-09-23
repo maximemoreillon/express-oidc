@@ -30,10 +30,12 @@ export default ({ jwksUri }: Options) => {
 
     try {
       decoded = jwt.decode(token, { complete: true })
+      if (!decoded) throw new Error(`Decoded token is null or undefined`)
     } catch (error) {
       console.error(error)
       return res.status(401).send(`Token decoding failed`)
     }
+
     const kid = decoded.header?.kid
 
     if (!kid) {
