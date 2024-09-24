@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken"
 
 type Options = {
   jwksUri: string
+  lax?: boolean
 }
 
 const extractJwt = ({ headers, query }: Request) =>
@@ -12,47 +13,37 @@ const extractJwt = ({ headers, query }: Request) =>
   (query.jwt as string) ??
   (query.token as string)
 
-export default ({ jwksUri }: Options) => {
-  if (!jwksUri) throw `jwksUri not defined`
+export default ({ jwksUri, lax }: Options) => {
+  if (!jwksUri) throw new Error(`jwksUri not defined`)
+
   const jwksClient = createJwksClient({
     jwksUri,
     cache: true,
     rateLimit: true,
   })
+
   return async (req: Request, res: Response, next: NextFunction) => {
-    const token = extractJwt(req)
-
-    if (!token) {
-      return res.status(401).send("Missing token")
-    }
-
-    let decoded: any
-
     try {
-      decoded = jwt.decode(token, { complete: true })
-      if (!decoded) throw new Error(`Decoded token is null or undefined`)
-    } catch (error) {
-      console.error(error)
-      return res.status(401).send(`Token decoding failed`)
-    }
+      const token = extractJwt(req)
+      if (!token) throw new Error("Missing token")
 
-    const kid = decoded.header?.kid
+      const decoded = jwt.decode(token, { complete: true })
+      if (!decoded) throw new Error(`Decoded token is null`)
 
-    if (!kid) {
-      return res.status(401).send("Token kid not found")
-    }
+      const kid = decoded.header?.kid
+      if (!kid) throw new Error("Missing token kid")
 
-    const key = await jwksClient.getSigningKey(kid)
+      const key = await jwksClient.getSigningKey(kid)
 
-    try {
       const verified = jwt.verify(token, key.getPublicKey())
 
       res.locals.user = verified
 
       next()
-    } catch (error) {
+    } catch (error: any) {
+      if (lax) return next()
       console.error(error)
-      return res.status(401).send(`Token verification failed`)
+      return res.status(401).send(error.toString())
     }
   }
 }

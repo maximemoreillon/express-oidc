@@ -11,6 +11,7 @@ app.use(cors())
 app.use(
   authMiddleware({
     jwksUri: OIDC_JWKS_URI,
+    lax: true,
   })
 )
 
