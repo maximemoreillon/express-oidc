@@ -30,7 +30,7 @@ export default ({ jwksUri, lax }: Options) => {
       const decoded = jwt.decode(token, { complete: true })
       if (!decoded) throw new Error(`Decoded token is null`)
 
-      const kid = decoded.header?.kid
+      const kid = decoded?.header?.kid
       if (!kid) throw new Error("Missing token kid")
 
       const key = await jwksClient.getSigningKey(kid)
