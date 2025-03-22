@@ -5,14 +5,14 @@ This is an authentication middleware that validates JWT from OIDC providers usin
 ## Installation
 
 ```bash
-npm i @moreillon/express-oid
+npm i @moreillon/express-oidc
 ```
 
 ## Usage
 
 ```ts
 import express, { type Request, type Response } from "express";
-import authMiddleware from "./index";
+import authMiddleware from "@moreillon/express-oidc";
 
 const app = express();
 app.use(
@@ -34,4 +34,5 @@ app.listen(7070, () => {
 
 ## Notes
 
-[Auth0's express-oauth2-jwt-bearer library](https://github.com/auth0/node-oauth2-jwt-bearer/tree/main/packages/express-oauth2-jwt-bearer) Could be a better alternative
+- Seems to match the content of [this article](https://traveling-coderman.net/code/node-architecture/authentication/)
+- [Auth0's express-oauth2-jwt-bearer library](https://github.com/auth0/node-oauth2-jwt-bearer/tree/main/packages/express-oauth2-jwt-bearer) Could be a better alternative
